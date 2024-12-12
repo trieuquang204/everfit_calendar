@@ -68,6 +68,7 @@ const Calendar: React.FC = () => {
   };
 
   const handleAddWorkout = (date: Date) => {
+    console.log('datedate', date)
     setModalPlaceholder('Enter workout name');
     setModalDate(date);
     setModalWorkoutId(null);

@@ -78,3 +78,10 @@ button:hover {
 .modal-content button {
   margin-right: 5px;
 }
+
+.day .day h3 {
+  display: none;
+}
+.day .day p {
+  display: none;
+}

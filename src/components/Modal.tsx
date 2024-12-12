@@ -15,6 +15,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onRequestClose, onSubmit, placeho
   }
 
   const handleSubmit = () => {
+    console.log('inputValue', inputValue)
     onSubmit(inputValue);
     setInputValue('');
     onRequestClose();
