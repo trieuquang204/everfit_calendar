@@ -1,0 +1,80 @@
+.calendar {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.day {
+  flex: 1;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.active {
+  background-color: #d4e0fc;
+  font-weight: bold;
+}
+
+.workout {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f0f0f0;
+  cursor: grab;
+  transition: transform 250ms ease, background-color 250ms ease;
+}
+
+.workout:active {
+  cursor: grabbing;
+}
+
+.exercise {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  margin-left: 10px;
+  padding: 2px 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content input {
+  margin-bottom: 10px;
+  padding: 5px;
+  width: calc(100% - 22px);
+}
+
+.modal-content button {
+  margin-right: 5px;
+}
