@@ -7,9 +7,10 @@ import { Workout as WorkoutType, Exercise as ExerciseType } from '../data/types'
 
 interface WorkoutProps {
   workout: WorkoutType;
+  date: Date;
 }
 
-const Workout: React.FC<WorkoutProps> = ({ workout }) => {
+const Workout: React.FC<WorkoutProps> = ({ workout, date }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: workout.id,
   });
@@ -24,8 +25,18 @@ const Workout: React.FC<WorkoutProps> = ({ workout }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAddExerciseClick = useCallback(() => {
+    const today = new Date();
+
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    if (date < yesterday) {
+      alert("Không thể thêm bài tập vào Workout trước ngày hôm qua.");
+      return;
+    }
+    
     setIsModalOpen(true);
-  }, []);
+  }, [date]);
 
   const handleModalSubmit = (exerciseName: string) => {
     workout.exercises.push({

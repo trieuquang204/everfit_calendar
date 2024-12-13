@@ -11,6 +11,7 @@ const Calendar: React.FC = () => {
   const [days, setDays] = useState<DayType[]>(initialData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalDate, setModalDate] = useState<Date | null>(null);
+  const today = new Date();
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: { distance: 10 },
@@ -65,6 +66,13 @@ const Calendar: React.FC = () => {
   };
 
   const handleAddWorkout = (date: Date) => {
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    if (date < yesterday) {
+      alert("Không thể thêm Workout vào ngày trước ngày hôm qua.");
+      return;
+    }
+
     setModalDate(date);
     setIsModalOpen(true);
   };
@@ -113,7 +121,7 @@ const Calendar: React.FC = () => {
               <p>{date.toLocaleDateString('vi-VN')}</p>
               {dayData && (
                 <SortableContext items={dayData.workouts} strategy={rectSortingStrategy}>
-                  <Day day={dayData} />
+                  <Day day={dayData} date={date} />
                 </SortableContext>
               )}
             </div>
