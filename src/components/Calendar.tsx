@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
-import { DndContext, closestCenter, MouseSensor, useSensor, useSensors } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { initialData } from './data/initialData';
-import { Day } from './data/types';
-import DayComponent from './components/Day';
-import Modal from './components/Modal';
-import { getStartOfWeek, addDays, isToday } from './utils/dateUtils';
-import './styles.css';
+import { DndContext, MouseSensor, useSensor, useSensors, closestCenter } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
+import Day from './Day';
+import Modal from './Modal';
+import { initialData } from '../data/initialData';
+import { Day as DayType, Workout as WorkoutType } from '../data/types';
+import { getStartOfWeek, addDays, isToday } from '../utils/dateUtils';
 
 const Calendar: React.FC = () => {
-  const [days, setDays] = useState<Day[]>(initialData);
+  const [days, setDays] = useState<DayType[]>(initialData);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalPlaceholder, setModalPlaceholder] = useState('');
   const [modalDate, setModalDate] = useState<Date | null>(null);
-  const [modalWorkoutId, setModalWorkoutId] = useState<string | null>(null);
 
   const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: { distance: 10 }, // Kích hoạt khi kéo 10px
+    activationConstraint: { distance: 10 },
   });
   const sensors = useSensors(mouseSensor);
 
@@ -68,67 +65,38 @@ const Calendar: React.FC = () => {
   };
 
   const handleAddWorkout = (date: Date) => {
-    console.log('datedate', date)
-    setModalPlaceholder('Enter workout name');
     setModalDate(date);
-    setModalWorkoutId(null);
     setIsModalOpen(true);
   };
 
-  const handleAddExercise = (workoutId: string, exerciseName: string) => {
-    const newExercise = {
-      id: `exercise-${new Date().getTime()}`,
-      name: exerciseName,
-      sets: [],
-    };
-
-    const newDays = days.map((day) => {
-      const newWorkouts = day.workouts.map((workout) => {
-        if (workout.id === workoutId) {
-          return {
-            ...workout,
-            exercises: [...workout.exercises, newExercise],
-          };
-        }
-        return workout;
-      });
-      return { ...day, workouts: newWorkouts };
-    });
-
-    setDays(newDays);
-  };
-
-  const handleModalSubmit = (value: string) => {
+  const handleModalSubmit = (workoutName: string) => {
     if (modalDate) {
-      const newWorkout = {
+      const newWorkout: WorkoutType = {
         id: `workout-${new Date().getTime()}`,
-        name: value,
+        name: workoutName,
         exercises: [],
       };
 
-      let updated = false;
-      const newDays = days.map((day) => {
-        if (day.date.toDateString() === modalDate.toDateString()) {
-          updated = true;
-          return {
-            ...day,
-            workouts: [...day.workouts, newWorkout],
-          };
+      setDays((prevDays) => {
+        const dateExists = prevDays.find((day) => day.date.toDateString() === modalDate.toDateString());
+
+        if (dateExists) {
+          return prevDays.map((day) => 
+            day.date.toDateString() === modalDate.toDateString()
+              ? { ...day, workouts: [...day.workouts, newWorkout] }
+              : day
+          );
+        } else {
+          return [...prevDays, { date: modalDate, workouts: [newWorkout] }];
         }
-        return day;
       });
 
-      if (!updated) {
-        newDays.push({ date: modalDate, workouts: [newWorkout] });
-      }
-
-      setDays(newDays);
+      setIsModalOpen(false);
     }
   };
 
   const startOfWeek = getStartOfWeek(new Date());
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(startOfWeek, i));
-
   const dayShortNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
@@ -143,13 +111,7 @@ const Calendar: React.FC = () => {
                 {dayName} ({date.getDate()}) <button onClick={() => handleAddWorkout(date)}>+</button>
               </h3>
               <p>{date.toLocaleDateString('vi-VN')}</p>
-              {dayData ? (
-                <SortableContext items={dayData.workouts} strategy={verticalListSortingStrategy}>
-                  <DayComponent key={dayData.date.toDateString()} day={dayData} onAddExercise={handleAddExercise} />
-                </SortableContext>
-              ) : (
-                <p>Không có bài tập</p>
-              )}
+              {dayData && <Day day={dayData} />}
             </div>
           );
         })}
@@ -158,7 +120,7 @@ const Calendar: React.FC = () => {
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         onSubmit={handleModalSubmit}
-        placeholder={modalPlaceholder}
+        placeholder="Enter workout name"
       />
     </DndContext>
   );

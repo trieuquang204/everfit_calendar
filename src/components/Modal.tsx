@@ -15,7 +15,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onRequestClose, onSubmit, placeho
   }
 
   const handleSubmit = () => {
-    console.log('inputValue', inputValue)
     onSubmit(inputValue);
     setInputValue('');
     onRequestClose();
@@ -31,8 +30,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onRequestClose, onSubmit, placeho
           onChange={(e) => setInputValue(e.target.value)} 
           placeholder={placeholder} 
         />
-        <button onClick={handleSubmit}>Thêm</button>
-        <button onClick={onRequestClose}>Đóng</button>
+        <button onClick={handleSubmit}>Submit</button>
+        <button onClick={onRequestClose}>Close</button>
       </div>
     </div>
   );

@@ -1,28 +1,16 @@
 import React from 'react';
-import { Day as DayType } from '../data/types';
 import Workout from './Workout';
-import { useDroppable } from '@dnd-kit/core';
+import { Day as DayType, Workout as WorkoutType } from '../data/types';
 
 interface DayProps {
   day: DayType;
-  onAddExercise: (workoutId: string, exerciseName: string) => void;
 }
 
-const Day: React.FC<DayProps> = ({ day, onAddExercise }) => {
-  const { setNodeRef } = useDroppable({
-    id: day.date.toDateString(),
-  });
-
-  const dayOfWeek = day.date.toLocaleDateString('vi-VN', { weekday: 'long' });
-  const dayOfMonth = day.date.getDate();
-  const fullDate = day.date.toLocaleDateString('vi-VN');
-
+const Day: React.FC<DayProps> = ({ day }) => {
   return (
-    <div className="day" ref={setNodeRef}>
-      <h3>{dayOfWeek} ({dayOfMonth})</h3>
-      <p>{fullDate}</p> {/* Hiển thị ngày tháng năm */}
-      {day.workouts.map(workout => (
-        <Workout key={workout.id} workout={workout} onAddExercise={onAddExercise} />
+    <div className="day-content">
+      {day.workouts.map((workout: WorkoutType) => (
+        <Workout key={workout.id} workout={workout} />
       ))}
     </div>
   );

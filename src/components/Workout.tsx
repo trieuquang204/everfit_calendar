@@ -1,16 +1,15 @@
 import React, { useState, useCallback } from 'react';
-import { Workout as WorkoutType, Exercise as ExerciseType } from '../data/types';
-import Exercise from './Exercise';
-import { useSortable, SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useSortable, SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import Exercise from './Exercise';
 import Modal from './Modal';
+import { Workout as WorkoutType, Exercise as ExerciseType } from '../data/types';
 
 interface WorkoutProps {
   workout: WorkoutType;
-  onAddExercise: (workoutId: string, exerciseName: string) => void;
 }
 
-const Workout: React.FC<WorkoutProps> = ({ workout, onAddExercise }) => {
+const Workout: React.FC<WorkoutProps> = ({ workout }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
     id: workout.id,
   });
@@ -28,21 +27,19 @@ const Workout: React.FC<WorkoutProps> = ({ workout, onAddExercise }) => {
   }, []);
 
   const handleModalSubmit = (exerciseName: string) => {
-    onAddExercise(workout.id, exerciseName);
+    workout.exercises.push({
+      id: `exercise-${new Date().getTime()}`,
+      name: exerciseName,
+      sets: [],
+    });
     setIsModalOpen(false);
   };
 
   return (
-    <div 
-      className="workout" 
-      ref={setNodeRef} 
-      style={style} 
-      {...attributes} 
-      {...listeners} 
-    >
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="workout">
       <h4>{workout.name} <button onClick={handleAddExerciseClick}>+</button></h4>
       <SortableContext items={workout.exercises} strategy={verticalListSortingStrategy}>
-        {workout.exercises.map(exercise => (
+        {workout.exercises.map((exercise: ExerciseType) => (
           <Exercise key={exercise.id} exercise={exercise} />
         ))}
       </SortableContext>

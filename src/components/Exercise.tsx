@@ -1,7 +1,7 @@
 import React from 'react';
-import { Exercise as ExerciseType } from '../data/types';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Exercise as ExerciseType } from '../data/types';
 
 interface ExerciseProps {
   exercise: ExerciseType;

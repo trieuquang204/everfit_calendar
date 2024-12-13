@@ -1,14 +1,10 @@
-// quangtrieu210697@gmail.com
-// 0338930619
-
 import React from 'react';
-import Calendar from './Calendar';
+import Calendar from './components/Calendar';
 import './styles.css';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <h1>Workout Calendar</h1>
+    <div className="app">
       <Calendar />
     </div>
   );

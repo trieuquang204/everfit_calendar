@@ -1,3 +1,8 @@
+.app {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
 .calendar {
   display: flex;
   flex-wrap: wrap;
@@ -14,6 +19,10 @@
 .active {
   background-color: #d4e0fc;
   font-weight: bold;
+}
+
+.day-content {
+  margin-top: 10px;
 }
 
 .workout {
@@ -77,11 +86,4 @@ button:hover {
 
 .modal-content button {
   margin-right: 5px;
-}
-
-.day .day h3 {
-  display: none;
-}
-.day .day p {
-  display: none;
 }
