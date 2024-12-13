@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useSortable, SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { useSortable, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import Exercise from './Exercise';
 import Modal from './Modal';
@@ -10,14 +10,15 @@ interface WorkoutProps {
 }
 
 const Workout: React.FC<WorkoutProps> = ({ workout }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: workout.id,
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition || 'transform 250ms ease',
-    cursor: 'grab',
+    opacity: isDragging ? 0.5 : 1,
+    cursor: isDragging ? 'grabbing' : 'grab',
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -8,14 +8,15 @@ interface ExerciseProps {
 }
 
 const Exercise: React.FC<ExerciseProps> = ({ exercise }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: exercise.id,
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: transition || 'transform 250ms ease',
-    cursor: 'grab',
+    opacity: isDragging ? 0.5 : 1,
+    cursor: isDragging ? 'grabbing' : 'grab',
     margin: '10px 0',
     padding: '10px',
     backgroundColor: '#f0f0f0',

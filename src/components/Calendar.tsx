@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { DndContext, MouseSensor, useSensor, useSensors, closestCenter } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
+import { DndContext, MouseSensor, useSensor, useSensors, closestCorners } from '@dnd-kit/core';
+import { SortableContext, rectSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import Day from './Day';
 import Modal from './Modal';
 import { initialData } from '../data/initialData';
@@ -100,7 +100,7 @@ const Calendar: React.FC = () => {
   const dayShortNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
-    <DndContext sensors={sensors} onDragEnd={handleDragEnd} collisionDetection={closestCenter}>
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
       <div className="calendar">
         {weekDays.map((date, index) => {
           const dayData = days.find((day) => day.date.toDateString() === date.toDateString());
@@ -111,7 +111,11 @@ const Calendar: React.FC = () => {
                 {dayName} ({date.getDate()}) <button onClick={() => handleAddWorkout(date)}>+</button>
               </h3>
               <p>{date.toLocaleDateString('vi-VN')}</p>
-              {dayData && <Day day={dayData} />}
+              {dayData && (
+                <SortableContext items={dayData.workouts} strategy={rectSortingStrategy}>
+                  <Day day={dayData} />
+                </SortableContext>
+              )}
             </div>
           );
         })}
